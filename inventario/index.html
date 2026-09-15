@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario Tecnologico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <!-- Encabezado con logotipo de la sucursal y título del inventario -->
+        <div class="cabecera-empresa">
+            <img id="logoSucursal" alt="Imagen de la sucursal">
+            <div><h1>Inventario Tecnologico</h1><p id="nombreCarniceria"></p></div>
+        </div>
+        <!-- Botones para descargar el inventario y regresar al menú principal -->
+        <div class="botones-header">
+            <button class="btn-descargar" onclick="descargarInventario()">Descargar inventario</button>
+            <button class="btn-regresar" onclick="regresarMenu()">Menu principal</button>
+        </div>
+    </header>
+<!-- Main content area with sections for registering equipment, displaying active inventory, and showing equipment that has been decommissioned -->
+    <main class="contenedor">
+        <section class="panel">
+            <h2>Registrar equipo</h2>
+            <div class="formulario">
+                <div><label>Equipo *</label><input type="text" id="equipo" placeholder="Computadora"></div>
+                <div><label>Marca / Modelo</label><input type="text" id="marca" placeholder="HP ProDesk"></div>
+                <div><label>Numero de serie</label><input type="text" id="serie" placeholder="Numero de serie"></div>
+                <div><label>Cantidad *</label><input type="number" id="cantidad" min="1" value="1"></div>
+                <div><label>Ubicacion</label><select id="ubicacion"><option value="Caja">Caja</option><option value="Oficina">Oficina</option><option value="Almacen">Almacen</option></select></div>
+                <div><label>Cargo</label><select id="cargo"><option value="Cajero">Cajero</option><option value="Encargado">Encargado</option><option value="Oficinista">Oficinista</option></select></div>
+                <div><label>Estado</label><select id="estado"><option value="Bueno">Bueno</option><option value="Regular">Regular</option><option value="Malo">Malo</option></select></div>
+                <div><label>Responsable</label><input type="text" id="responsable" placeholder="Nombre del responsable"></div>
+                <div><label>Imagen del equipo</label><input type="file" id="imagenEquipo" accept="image/*" capture="environment"></div>
+                <div class="campo-completo"><label>Observaciones</label><textarea id="observaciones" placeholder="Observaciones"></textarea></div>
+            </div>
+            <!-- Botón para agregar un nuevo equipo al inventario -->
+            <button class="btn-agregar" onclick="agregarEquipo()">Agregar equipo</button>
+            <p id="mensaje" class="mensaje"></p>
+        </section>
+        <!-- Panel que muestra el inventario activo con una tabla de equipos -->
+        <section class="panel">
+            <div class="titulo-tabla"><div><h2>Inventario activo</h2><p id="totalEquipos">Total: 0</p></div><span class="nota-orden">Ordenado por ubicacion y cargo</span></div>
+            <div class="tabla-contenedor">
+                <table>
+                    <thead><tr><th>Imagen</th><th>Equipo</th><th>Marca / Modelo</th><th>Serie</th><th>Cantidad</th><th>Ubicacion</th><th>Cargo</th><th>Estado</th><th>Responsable</th><th>Observaciones</th><th>Acciones</th></tr></thead>
+                    <tbody id="tablaInventario"></tbody>
+                </table>
+            </div>
+        </section>
+<!-- Panel que muestra el historial de equipos dados de baja con una tabla -->
+        <section class="panel panel-bajas">
+            <div class="titulo-tabla"><div><h2>Equipos dados de baja</h2><p>Historial con motivo e imagen del dispositivo.</p></div></div>
+            <div class="tabla-contenedor">
+                <table>
+                    <thead><tr><th>Imagen</th><th>Equipo</th><th>Cantidad</th><th>Ubicacion</th><th>Cargo</th><th>Motivo de baja</th><th>Fecha</th></tr></thead>
+                    <tbody id="tablaBajas"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <!-- Diálogo para confirmar la baja de un equipo con motivo y opción de anexar imagen -->
+    <dialog id="dialogoBaja" class="dialogo-baja">
+        <form method="dialog" class="formulario-baja" onsubmit="confirmarBaja(event)">
+            <h2>Dar equipo de baja</h2>
+            <p id="equipoBaja"></p>
+            <input type="hidden" id="indiceBaja">
+            <label>Motivo de la baja *</label>
+            <textarea id="motivoBaja" required placeholder="Explique por que se da de baja el equipo"></textarea>
+            <label>Anexar imagen del dispositivo</label>
+            <input type="file" id="imagenBaja" accept="image/*" capture="environment">
+            <div class="acciones-dialogo"><button type="button" class="btn-cancelar" onclick="cerrarBaja()">Cancelar</button><button class="btn-confirmar-baja" value="confirmar">Confirmar baja</button></div>
+        </form>
+    </dialog>
+    <script src="../data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
