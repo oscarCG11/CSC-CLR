@@ -1,0 +1,467 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+}
+/* Estilos generales */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #f5f5f5 0%, #eef3f8 100%);
+    color: #1f2937;
+}
+/* Estilos de la página principal */
+.pagina-principal {
+    position: relative;
+    min-height: 100vh;
+}
+/* Imágenes decorativas en las esquinas */
+.corner-image {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 24px;
+    opacity: 0.85;
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+    z-index: 0;
+    pointer-events: none;
+    animation: aparecerSuave 0.8s ease both;
+    top: 50%;
+    transform: translateY(-50%);
+}
+/* Posiciones de las imágenes decorativas */
+.corner-left {
+    left: 24px;
+}
+/* Posiciones de las imágenes decorativas */
+.corner-right {
+    right: 24px;
+}
+/* Encabezado, contenedor y pie de página */
+.encabezado,
+.contenedor,
+footer {
+    position: relative;
+    z-index: 1;
+}
+/* Encabezado con gradiente y contenido centrado */
+.encabezado {
+    background: linear-gradient(120deg, #111827 0%, #374151 100%);
+    color: white;
+    text-align: center;
+    padding: 36px 20px 48px;
+}
+/* Contenido del encabezado centrado y con ancho máximo */
+.encabezado-contenido {
+    max-width: 800px;
+    margin: 0 auto;
+}
+/* Estilo de la mini-badge */
+.mini-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.12);
+    color: #f9fafb;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+/* Estilo del título y subtítulo del encabezado */
+.encabezado h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3vw, 3rem);
+    letter-spacing: 0.03em;
+}
+/* Estilo del párrafo del encabezado */
+.encabezado p {
+    margin: 0;
+    color: #d1d5db;
+    font-size: 1.05rem;
+}
+/* Contenedor principal con ancho máximo y centrado */
+.contenedor {
+    width: min(1100px, 90%);
+    margin: 50px auto 30px;
+}
+/* Estilo de la sección de bienvenida */
+.bienvenida {
+    text-align: center;
+    margin-bottom: 30px;
+}
+/* Estilo del título de la sección de bienvenida */
+.bienvenida h2 {
+    margin: 0 0 10px;
+    font-size: clamp(1.7rem, 2vw, 2.4rem);
+}
+/* Estilo del párrafo de la sección de bienvenida */
+.bienvenida p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 1rem;
+}
+/* Estilo de la sección de sucursales */
+.sucursales {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+/* Estilo de las tarjetas de sucursal y menú */
+.tarjeta-sucursal,
+.menu-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 18px;
+    padding: 30px 24px;
+    cursor: pointer;
+    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+    animation: entradaTarjeta 0.65s ease both;
+}
+/* Efecto hover para las tarjetas de sucursal y menú */
+.tarjeta-sucursal:hover,
+.menu-card:hover {
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+    border-color: rgba(234, 88, 12, 0.55);
+}
+/* Estilo de las tarjetas de sucursal */
+.tarjeta-sucursal {
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+/* Animación de retraso para la segunda tarjeta de sucursal y menú */
+.tarjeta-sucursal:nth-child(2),
+.menu-card:nth-child(2) {
+    animation-delay: 0.12s;
+}
+/* Animación de retraso para la tercera tarjeta de sucursal y menú */
+.imagen-sucursal {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    transition: filter 0.3s ease;
+}
+/* Efecto hover para la imagen de la sucursal */
+.tarjeta-sucursal:hover .imagen-sucursal {
+    filter: saturate(1.2) brightness(1.04);
+}
+/* Estilo del icono dentro de las tarjetas */
+.icono {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #111827 0%, #f59e0b 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 18px;
+}
+/* Estilo de los títulos y párrafos dentro de las tarjetas */
+.tarjeta-sucursal h3,
+.menu-card h3 {
+    margin: 0 0 12px;
+    font-size: 1.3rem;
+}
+/* Estilo de los párrafos dentro de las tarjetas */
+.tarjeta-sucursal p,
+.menu-card p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.5;
+}
+/* Estilo del contenedor de acciones del menú */
+.menu-acciones {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+/* Estilo de las tarjetas de menú */
+.menu-card {
+    text-align: left;
+    padding: 28px 24px;
+}
+/* Estilo de las etiquetas dentro de las tarjetas */
+.etiqueta {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+/* Estilo de las etiquetas dentro de las tarjetas de inventario y bajas */
+.card-inventario .etiqueta {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+/* Estilo de las etiquetas dentro de las tarjetas de bajas */
+.card-bajas .etiqueta {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+/* Estilo de la lista de estados */
+.estado-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+/* Estilo de los elementos de la lista de estados */
+.estado-lista span {
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #f3f4f6;
+    color: #374151;
+}
+/* Estilo del pie de página */
+footer {
+    text-align: center;
+    padding: 22px 20px 35px;
+    color: #6b7280;
+    font-weight: 600;
+}
+/* Animaciones */
+@keyframes entradaTarjeta {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Animación de aparición suave para las imágenes decorativas */
+@keyframes aparecerSuave {
+    from { opacity: 0; }
+    to { opacity: 0.85; }
+}
+/* Media queries para pantallas pequeñas */
+@media (max-width: 900px) {
+    .corner-image {
+        width: 120px;
+        height: 120px;
+    }
+}
+/* Media queries para pantallas muy pequeñas */
+@media (max-width: 700px) {
+    .corner-image {
+        display: none;
+    }
+/* Ajustes de diseño para pantallas muy pequeñas */
+    .sucursales,
+    .menu-acciones {
+        grid-template-columns: 1fr;
+    }
+/* Ajustes de diseño para pantallas muy pequeñas */
+    .encabezado {
+        padding-top: 28px;
+    }
+}
+
+/* Diseno destacado del menu principal. */
+.pagina-principal {
+    background: radial-gradient(circle at top, #fffaf0 0%, #eef3f8 48%, #e2e8f0 100%);
+}
+/* Encabezado con gradiente y destello animado */
+.encabezado {
+    background: linear-gradient(125deg, #0f172a 0%, #334155 52%, #9a6a12 100%);
+    overflow: hidden;
+}
+/* Destello animado en el encabezado */
+.encabezado::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.15) 50%, transparent 70%);
+    transform: translateX(-120%);
+    animation: destelloEncabezado 7s ease-in-out infinite;
+}
+/* Contenido del encabezado centrado y con ancho máximo */
+.encabezado-contenido {
+    position: relative;
+    z-index: 1;
+}
+/* Estilo del título del encabezado */
+.encabezado h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 800;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, .4);
+    letter-spacing: .05em;
+}
+/* Estilo del párrafo del encabezado y de la sección de bienvenida */
+.encabezado p,
+.bienvenida p {
+    font-weight: 600;
+}
+/* Estilo del título de la sección de bienvenida */
+.bienvenida h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #1e293b;
+    text-shadow: 0 2px 7px rgba(255,255,255,.8);
+}
+/* Estilo de las tarjetas de sucursal y menú al recibir foco o estar activas */
+.tarjeta-sucursal:focus-visible,
+.menu-card:focus-visible,
+.tarjeta-sucursal:active,
+.menu-card:active {
+    outline: 3px solid #f59e0b;
+    outline-offset: 4px;
+    border-color: #f59e0b;
+    background: #fffbeb;
+    box-shadow: 0 0 0 7px rgba(245, 158, 11, .2), 0 20px 40px rgba(15, 23, 42, .16);
+}
+/* Estilo de los títulos dentro de las tarjetas de sucursal y menú */
+.tarjeta-sucursal h3,
+.menu-card h3 {
+    color: #0f172a;
+    font-weight: 800;
+}
+/* Efecto hover para los títulos dentro de las tarjetas de sucursal y menú */
+.tarjeta-sucursal:hover h3,
+.menu-card:hover h3 {
+    color: #a16207;
+}
+/* Estilo de los párrafos dentro de las tarjetas de sucursal y menú */
+@keyframes destelloEncabezado {
+    0%, 65%, 100% { transform: translateX(-120%); }
+    82% { transform: translateX(120%); }
+}
+/* Media queries para pantallas pequeñas */
+@media (max-width: 700px) {
+    .encabezado {
+        padding: 30px 16px 38px;
+    }
+/* Ajustes de diseño para pantallas muy pequeñas */
+    .encabezado h1 {
+        font-size: 2rem;
+    }
+/* Ajustes de diseño para pantallas muy pequeñas */
+    .contenedor {
+        width: min(94%, 1100px);
+        margin-top: 30px;
+    }
+/* Ajustes de diseño para pantallas muy pequeñas */
+    .tarjeta-sucursal,
+    .menu-card {
+        padding: 22px 18px;
+    }
+}
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #0f172a 0%, #334155 35%, #f59e0b 100%);
+    padding: 24px;
+}
+
+.login-card {
+    width: min(440px, 100%);
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 20px;
+    padding: 32px 28px;
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.2);
+}
+
+.login-logos {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.login-logos img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+    border: 2px solid rgba(15, 23, 42, 0.08);
+}
+
+.login-card h1 {
+    margin: 0 0 10px;
+    text-align: center;
+    color: #111827;
+}
+
+.login-card p {
+    margin: 0 0 22px;
+    text-align: center;
+    color: #4b5563;
+}
+
+.login-form {
+    display: grid;
+    gap: 16px;
+}
+
+.login-form label {
+    display: grid;
+    gap: 8px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.login-form input {
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 1rem;
+}
+
+.login-form button {
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #111827 0%, #d97706 100%);
+    color: white;
+    padding: 13px 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    filter: brightness(1.04);
+}
+
+.login-message {
+    min-height: 20px;
+    margin-top: 14px;
+    text-align: center;
+    font-size: 0.92rem;
+    color: #b91c1c;
+}
+
+.usuario-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    padding: 8px 12px;
+    color: #f9fafb;
+    font-size: 0.85rem;
+    margin-top: 12px;
+}
+
+.usuario-badge button {
+    border: none;
+    background: transparent;
+    color: #fef3c7;
+    cursor: pointer;
+    font-weight: 700;
+}

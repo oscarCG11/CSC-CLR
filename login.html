@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+    <main class="login-card">
+        <div class="login-logos" aria-label="Logos de sucursales">
+            <img src="colorado.png" alt="Sucursal Colorado">
+            <img src="reyes.png" alt="Sucursal Reyes">
+        </div>
+        <h1>Control SCC y CSR</h1>
+        <p>Acceso al sistema de checklist e inventario</p>
+        <form class="login-form" id="loginForm">
+            <label>
+                Usuario
+                <input id="usuario" name="usuario" type="text" placeholder="Oscar" value="Oscar" required>
+            </label>
+            <label>
+                Contraseña
+                <input id="password" name="password" type="password" placeholder="••••••••" required>
+            </label>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+        <p class="login-message" id="loginMessage"></p>
+    </main>
+
+    <script src="data.js"></script>
+    <script>
+        const form = document.getElementById("loginForm");
+        const mensaje = document.getElementById("loginMessage");
+        if (appAuth.obtenerUsuarioActual()) {
+            window.location.href = "index.html";
+        }
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const usuario = document.getElementById("usuario").value.trim();
+            const password = document.getElementById("password").value;
+            if (await appAuth.iniciarSesion(usuario, password)) {
+                window.location.href = "index.html";
+                return;
+            }
+            mensaje.textContent = "Usuario o contraseña incorrectos.";
+        });
+    </script>
+</body>
+</html>

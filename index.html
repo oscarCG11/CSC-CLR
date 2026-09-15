@@ -1,0 +1,106 @@
+<!--!tipo de documento html-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Carnicerías</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="pagina-principal">
+    
+<!-- Encabezado con imágenes de las sucursales y título del sistema -->
+    <header class="encabezado">
+        <img class="corner-image corner-left" src="coloradob.png" alt="Sucursal Colorado">
+        <div class="encabezado-contenido">
+            <!-- Mini badge indicating the department -->
+            <span class="mini-badge">Departamento de sistemas</span>
+            <h1>"Sistema de Control Tecnológico"</h1>
+            <p>😊Bienvenido al sistema de control del departamento de sistemas😊</p>
+        </div>
+        <img class="corner-image corner-right" src="reyes.png" alt="Sucursal Reyes">
+    </header>
+<!-- Main content area with sections for branch selection and action menu -->
+    <main class="contenedor">
+        <section class="bienvenida">
+            <h2>Seleccione sucursal a revisar</h2>
+        </section>
+<!--Botones para seleccionar sucursales-->
+        <section class="sucursales">
+            <!-- Boton para la sucursal "Super Carnes el Colorado" -->
+            <button
+                class="tarjeta-sucursal"
+                type="button"
+                data-sucursal="Super Carnes el Colorado"
+                data-imagen="colorado.png"
+                onclick="seleccionarCarniceria(this.dataset.sucursal, this.dataset.imagen)">
+                <div class="icono">01</div>
+                <h3>Super Carnes  el Colorado</h3>
+                <p>Super Carnes  el Colorado</p>
+            </button>
+            <!-- Boton para la sucursal "Carnes Selectas los Reyes" -->
+            <button
+                class="tarjeta-sucursal"
+                type="button"
+                data-sucursal="Carnes Selectas los Reyes"
+                data-imagen="reyes.png"
+                onclick="seleccionarCarniceria(this.dataset.sucursal, this.dataset.imagen)">
+                <div class="icono">02</div>
+                <h3>Carnes Selectas los Reyes</h3>
+                <p>Carnes Selectas los Reyes</p>
+            </button>
+        </section>
+        <!-- Menu de selección con tarjetas de acción para checklist, inventario y historial -->
+        <section class="menu-acciones">
+            <button class="menu-card card-checklist" type="button" onclick="irASeccion('checklist')">
+                <span class="etiqueta">Checklist</span>
+                <h3>Revisión de sistemas</h3>
+                <p>Registro de cumplimiento, no cumplimiento y observaciones.</p>
+                <!-- Lista de estados para el checklist -->
+                <div class="estado-lista">
+                    <span>Cumple</span>
+                    <span>No cumple</span>
+                    <span>Observaciones</span>
+                </div>
+            </button>
+            <!-- Botón para la sección de inventario -->
+            <button class="menu-card card-inventario" type="button" onclick="irASeccion('inventario')">
+                <span class="etiqueta">Inventario</span>
+                <h3>Control de equipos</h3>
+                <p>Administración de inventario, equipos, marca y responsables.</p>
+                <!-- Lista de estados para el inventario -->
+                <div class="estado-lista">
+                    <span>Activos</span>
+                    <span>Ubicación</span>
+                    <span>Estado</span>
+                </div>
+            </button>
+            <!-- Botón para la sección de bajas -->
+            <button class="menu-card card-bajas" type="button" onclick="irASeccion('bajas')">
+                <span class="etiqueta">Bajas</span>
+                <h3>Historial de equipos</h3>
+                <p>Consulte los equipos retirados, su motivo, fecha e imagen.</p>
+                <div class="estado-lista"><span>Motivo</span><span>Imagen</span><span>Fecha</span></div>
+            </button>
+            <button class="menu-card card-documentos" type="button" onclick="irASeccion('documentos')">
+                <span class="etiqueta">Documentos PDF</span>
+                <h3>Archivo compartido</h3>
+                <p>Guarde, consulte y descargue documentos desde cualquier equipo conectado.</p>
+                <div class="estado-lista"><span>PDF</span><span>Historial</span><span>Descargas</span></div>
+            </button>
+        </section>
+    </main>
+
+    <footer>
+        Sistema para facilitar el control e inventario de equipos tecnológicos
+    </footer>
+
+    <div class="usuario-badge" style="position: fixed; right: 18px; top: 18px; z-index: 10;">
+        <span id="usuarioActivo">Usuario</span>
+        <button type="button" id="cerrarSesion">Cerrar sesión</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
