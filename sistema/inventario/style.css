@@ -1,0 +1,331 @@
+/* Reset de estilos y configuración básica */
+* { 
+    box-sizing: border-box; }
+/* Estilos generales para el cuerpo de la página */
+body { 
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6; color: #1f2937; }
+/* Encabezado, contenedor y pie de página */
+header { position: relative;
+    overflow: hidden; 
+    display: flex; align-items: center; 
+    justify-content: space-between; 
+    gap: 20px; 
+    padding: 20px 5% 20px 120px; 
+    color: #fff; 
+    background: linear-gradient(120deg, #111827, #374151); 
+    animation: brilloEncabezado 6s ease-in-out infinite; }
+/* Contenedor principal con ancho máximo y centrado */
+.cabecera-empresa { 
+    display: 
+    flex; 
+    align-items: 
+    center; 
+    gap: 16px; }
+/* Estilo del logo de la sucursal en el encabezado */
+#logoSucursal { 
+    position: absolute; 
+    left: 24px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    width: 72px; 
+    height: 72px; 
+    object-fit: cover; 
+    border: 2px solid rgba(255,255,255,.55); border-radius: 18px; 
+    background: #fff; 
+    animation: aparecerLogo .7s ease both; 
+}
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+header h1 { 
+    margin: 0 0 6px; 
+    font-size: clamp(1.7rem, 2vw, 2.3rem); }
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+header p { 
+    margin: 0;
+    color: #e5e7eb; }
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+.botones-header, .acciones-tabla { 
+    display: flex; 
+    gap: 10px; 
+    align-items: center; }
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+button { 
+    border: 0; 
+    border-radius: 10px; 
+    padding: 11px 16px; 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease; }
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+button:hover { transform: translateY(-2px); 
+    opacity: .94; 
+    box-shadow: 0 7px 15px rgba(15,23,42,.15); 
+}
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+.btn-regresar { 
+    background: #fff;
+    color: #111827; 
+}
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+.btn-descargar, .btn-agregar { 
+    background: #f59e0b; 
+    color: #111827; 
+}
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+.btn-agregar { 
+    margin-top: 20px; 
+}
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+.btn-baja { 
+    background: #fee2e2; 
+    color: #b91c1c; 
+    padding: 8px 10px; 
+    font-size: .82rem; }
+/* Estilos de los botones en el encabezado y en las acciones de la tabla */
+.contenedor { 
+    width: min(1350px, 92%); 
+    margin: 30px auto 50px; 
+}
+/* Estilos de los paneles de contenido */
+.panel { 
+    margin-bottom: 25px;
+    padding: 25px; 
+    background: #fff; 
+    border-radius: 18px; 
+    box-shadow: 0 12px 30px rgba(15,23,42,.08); 
+    animation: aparecerPanel .6s ease both; 
+}
+/* Estilos de los paneles de contenido con animación escalonada */
+.panel:nth-child(2) { 
+    animation-delay: .1s;
+ 
+}
+/* Estilos de los paneles de contenido con animación escalonada */
+.panel:nth-child(3) { 
+    animation-delay: .18s; 
+}
+/* Estilos de los títulos de las secciones y de los formularios */
+.panel h2 { 
+    margin: 0 0 20px; 
+}
+/* Estilos de los títulos de las secciones y de los formularios */
+.formulario { 
+    display: grid; 
+    grid-template-columns: 
+    repeat(3, minmax(0, 1fr)); 
+    gap: 18px; 
+}
+/* Estilos de los títulos de las secciones y de los formularios */
+.formulario label { 
+    display: block; 
+    margin-bottom: 7px; 
+    color: #374151; font-size: .9rem; 
+    font-weight: 700; 
+}
+/* Estilos de los campos de entrada, selección y área de texto en los formularios */
+.formulario input, .formulario select, .formulario textarea { 
+    width: 100%; 
+    padding: 11px 12px; 
+    border: 1px 
+    solid #d1d5db; 
+    border-radius: 9px; 
+    font: inherit; 
+    color: #1f2937; 
+    background: #fff; 
+}
+/* Estilos de los campos de entrada, selección y área de texto en los formularios */
+.formulario textarea { min-height: 90px;
+    resize: vertical; 
+}
+/* Estilos de enfoque visible para accesibilidad */
+.formulario input:focus, .formulario select:focus, .formulario textarea:focus { 
+    outline: 2px solid #fbbf24; 
+    outline-offset: 1px; 
+    border-color: #f59e0b; 
+}/* Estilos de enfoque visible para accesibilidad */
+.campo-completo { 
+    grid-column: 1 / -1;
+}/* Estilos de enfoque visible para accesibilidad */
+.mensaje { 
+    min-height: 1.2em; 
+    margin: 16px 0 0; 
+    font-weight: 700; }
+/* Estilos de la tabla de inventario y del historial de bajas */
+.titulo-tabla { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 16px; 
+    margin-bottom: 18px; 
+    padding-bottom: 18px; 
+    border-bottom: 1px solid #e5e7eb; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.titulo-tabla h2 { 
+    margin: 0 0 6px; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.titulo-tabla p, .nota-orden { 
+    margin: 0; 
+    color: #6b7280; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.nota-orden { 
+    padding: 7px 10px; 
+    border-radius: 999px; 
+    background: #f3f4f6; 
+    font-size: .82rem; 
+    font-weight: 700; }
+/* Estilos de la tabla de inventario y del historial de bajas */
+.tabla-contenedor { 
+    overflow-x: auto;
+    border: 1px solid #e5e7eb; 
+    border-radius: 12px; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+table { width: 100%;
+    min-width: 1250px; 
+    border-collapse: collapse; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+th, td { padding: 12px 13px; 
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left; 
+    vertical-align: top; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+th { 
+    background: #111827; 
+    color: #fff; 
+    font-size: .85rem; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+tbody tr:last-child td 
+{ 
+    border-bottom: 0;
+ }
+/* Estilos de la tabla de inventario y del historial de bajas */
+tbody tr:hover { 
+    background: #f9fafb; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.foto-equipo { 
+    display: block; 
+    width: 58px; 
+    height: 58px; 
+    object-fit: cover; 
+    border-radius: 10px; 
+    background: #e5e7eb; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.estado-bueno { 
+    color: #15803d;     
+    font-weight: 700; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.estado-regular { 
+    color: #b45309; 
+    font-weight: 700; 
+}
+/* Estilos de la tabla de inventario y del historial de bajas */
+.estado-malo { 
+    color: #b91c1c; 
+    font-weight: 700; 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-colorado { 
+    background: linear-gradient(rgba(255,248,230,.9),rgba(255,248,230,.94)), url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80") center / cover fixed; 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-colorado header { 
+    background: linear-gradient(125deg,#5b3a05,#b77912 58%,#f4c85a); 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-colorado .panel { 
+    border: 1px solid rgba(180,119,18,.35); 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-colorado .btn-agregar, body.tema-colorado .btn-descargar { 
+    background: #d89b22; 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-reyes { 
+    background: linear-gradient(145deg,#edf7f7,#dbeafe 55%,#e0f2fe); 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-reyes header 
+{ 
+    background: linear-gradient(125deg,#0f3b52,#177e89 58%,#5bc0be); 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-reyes .panel { 
+    border: 1px solid rgba(23,126,137,.28); 
+}
+/* Estilos del diálogo de confirmación de baja */
+body.tema-reyes 
+.btn-agregar, body.tema-reyes .btn-descargar 
+{ background: #5bc0be; }
+/* Animaciones para la aparición de paneles y logotipos */
+@keyframes aparecerPanel { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes aparecerLogo { from { opacity:0; transform:translateY(-50%) scale(.85); } to { opacity:1; transform:translateY(-50%) scale(1); } }@keyframes brilloEncabezado { 0%,100% { filter:brightness(1); }50% { filter:brightness(1.07); } }
+/* Estilo de la cuadrícula de tarjetas de sucursal y menú */
+@media (max-width: 800px) { header { padding: 18px 5%; flex-direction: column; align-items: flex-start; }header #logoSucursal { position: static; transform: none; animation: none; }.botones-header { width: 100%; flex-direction: column; }.botones-header button { width: 100%; }.formulario { grid-template-columns: 1fr; }.contenedor { width: 94%; margin-top: 20px; }.panel { padding: 20px; }.titulo-tabla { align-items: flex-start; flex-direction: column; } }
+/* Estilo de la cuadrícula de tarjetas de sucursal y menú */
+.dialogo-baja { 
+    width: min(520px, 92vw); 
+    border: 0; 
+    border-radius: 18px; 
+    padding: 0; 
+    box-shadow: 0 24px 60px rgba(15,23,42,.3); 
+}
+/* Estilo del fondo del diálogo de confirmación de baja */
+.dialogo-baja::backdrop { background: rgba(15,23,42,.55); 
+    backdrop-filter: blur(3px); }
+/* Estilo del contenido del diálogo de confirmación de baja */
+.formulario-baja { display: grid; 
+    gap: 13px; 
+    padding: 25px; 
+}
+/* Estilo del contenido del diálogo de confirmación de baja */
+.formulario-baja h2 { margin: 0; }
+.formulario-baja p { margin: 0;
+    color: #6b7280; 
+    font-weight: 700; 
+}
+/* Estilo del contenido del diálogo de confirmación de baja */
+.formulario-baja label { font-size: .9rem; 
+    font-weight: 700; 
+    color: #374151; 
+}
+/* Estilo del contenido del diálogo de confirmación de baja */
+.formulario-baja textarea, 
+.formulario-baja input[type="file"] { 
+    width: 100%; 
+    font: inherit; 
+}
+/* Estilo del contenido del diálogo de confirmación de baja */
+.formulario-baja textarea { 
+    min-height: 105px; 
+    padding: 11px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 9px; 
+    resize: vertical; 
+}
+/* Estilo del contenido del diálogo de confirmación de baja */
+.acciones-dialogo { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 10px; 
+    margin-top: 8px; 
+}
+/* Estilo de los botones de cancelar y confirmar baja */
+.btn-cancelar { 
+    background: #e5e7eb; 
+    color: #1f2937; 
+}
+/* Estilo de los botones de cancelar y confirmar baja */
+.btn-confirmar-baja { 
+    background: #b91c1c; 
+    color: #fff; 
+}
