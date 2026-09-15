@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Bajas de equipos</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="empresa"><img id="logoSucursal" alt="Sucursal"><div><h1>Bajas de equipos</h1><p id="nombreCarniceria"></p></div></div><div class="botones"><button onclick="irInventario()">Inventario</button><button class="descargar" onclick="descargarBajas()">Descargar bajas</button><button onclick="regresarMenu()">Menu principal</button></div></header>
+<main><section><div class="titulo"><div><h2>Historial de bajas</h2><p id="totalBajas">Total: 0</p></div><span>Las bajas se registran desde Inventario.</span></div><div class="tabla"><table><thead><tr><th>Imagen</th><th>Equipo</th><th>Marca / Modelo</th><th>Serie</th><th>Cantidad</th><th>Ubicacion</th><th>Cargo</th><th>Motivo de baja</th><th>Fecha</th></tr></thead><tbody id="tablaBajas"></tbody></table></div></section></main>
+<script src="../data.js"></script><script src="script.js"></script>
+</body></html>
