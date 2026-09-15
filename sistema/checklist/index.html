@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Sistemas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="cabecera-checklist">
+        <div class="cabecera-empresa">
+            <img id="logoSucursal" alt="Logo de la sucursal">
+            <div>
+                <h1>Checklist de Sistemas</h1>
+                <p id="nombreCarniceria"></p>
+            </div>
+        </div>
+        <div class="botones-header">
+            <button class="btn-acciones btn-inventario" onclick="irInventario()">Inventario</button>
+            <button class="btn-acciones btn-descargar" onclick="descargarFormato()">Descargar formato</button>
+            <button class="btn-acciones btn-regresar" onclick="regresarMenu()">Menu principal</button>
+        </div>
+    </header>
+
+    <main class="contenedor">
+        <section class="panel">
+            <div class="encabezado-panel">
+                <div>
+                    <h2 id="tituloChecklist">Checklist diario</h2>
+                    <p>Registre las actividades de esta sucursal y agregue o elimine filas cuando lo necesite.</p>
+                </div>
+                <div class="fecha"><strong>Fecha y hora:</strong> <span id="fechaActual"></span></div>
+            </div>
+
+            <div class="selector-periodo" aria-label="Tipo de checklist">
+                <button type="button" class="periodo activo" data-periodo="diario" onclick="seleccionarTipo('diario')">Diario</button>
+                <button type="button" class="periodo" data-periodo="semanal" onclick="seleccionarTipo('semanal')">Semanal</button>
+                <button type="button" class="periodo" data-periodo="mensual" onclick="seleccionarTipo('mensual')">Mensual</button>
+            </div>
+
+            <div class="tabla-checklist">
+                <div class="checklist-header-row">
+                    <span class="col-actividad">Actividad</span>
+                    <span class="col-estado">Cumple</span>
+                    <span class="col-estado">No cumple</span>
+                    <span class="col-observacion">Observaciones</span>
+                    <span class="col-accion">Accion</span>
+                </div>
+                <div id="listaChecklist"></div>
+            </div>
+
+            <div class="acciones">
+                <button class="btn-nueva-fila" onclick="agregarFila()">+ Nueva fila</button>
+                <button class="btn-guardar" onclick="guardarChecklist()">Guardar checklist</button>
+                <button class="btn-limpiar" onclick="limpiarChecklist()">Limpiar lista</button>
+            </div>
+            <p id="mensaje" class="mensaje"></p>
+        </section>
+    </main>
+    <script src="../data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
