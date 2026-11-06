@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171612">
+  <title>Lista de precios</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #24221d;
+      --muted: #77736a;
+      --gold: #b48a3c;
+      --gold-light: #ead9b5;
+      --paper: #fbfaf7;
+      --line: #e9e5dc;
+      --white: #fff;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      min-height: 76px;
+      padding: 14px clamp(20px, 5vw, 72px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: #171612;
+      color: var(--white);
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .brand { display: flex; align-items: center; gap: 15px; }
+    .brand-logo { width: 72px; height: 56px; object-fit: contain; }
+    .brand-name { margin: 0; font-family: Georgia, serif; font-size: 21px; font-weight: 500; letter-spacing: .04em; }
+    .brand-caption { margin: 4px 0 0; color: #bdb8ae; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+
+    .admin-button {
+      padding: 10px 14px;
+      border: 1px solid #625a49;
+      border-radius: 7px;
+      background: transparent;
+      color: #f2eee5;
+      font-size: 13px;
+    }
+    .admin-button:hover { border-color: var(--gold); color: var(--gold-light); }
+    .admin-button.active { border-color: var(--gold); background: var(--gold); color: #171612; }
+
+    main { width: min(1120px, calc(100% - 40px)); margin: 42px auto 60px; }
+    .intro { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 25px; }
+    .eyebrow { margin: 0 0 8px; color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(29px, 4vw, 42px); font-weight: 500; letter-spacing: -.025em; }
+    .updated { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+    .tools { display: flex; align-items: center; gap: 10px; }
+    .search-wrap { position: relative; }
+    .search-icon { position: absolute; top: 50%; left: 13px; color: #8d887e; transform: translateY(-50%); }
+    .search {
+      width: min(290px, 35vw);
+      min-height: 44px;
+      padding: 10px 14px 10px 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: none;
+      background: var(--white);
+    }
+    .search:focus, input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px #b48a3c20; outline: none; }
+    .add-button, .save-button {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--gold);
+      color: #171612;
+      font-weight: 700;
+    }
+    .add-button:hover, .save-button:hover { background: #c59c50; }
+
+    .price-card { overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--white); box-shadow: 0 8px 26px #251d0c08; }
+    .table-head, .product-row { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(170px, .34fr) minmax(170px, .34fr) auto; align-items: center; column-gap: 22px; }
+    .table-head { min-height: 52px; padding: 0 26px; background: #f4f1e9; color: #736c5e; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .table-head span:not(:first-child) { text-align: right; }
+    .product-row { min-height: 83px; padding: 12px 26px; border-top: 1px solid var(--line); cursor: pointer; transition: background-color .18s ease, box-shadow .18s ease; }
+    .product-row:first-child { border-top: 0; }
+    .product-row:hover { background: #fcfaf4; }
+    .product-row.selected { background: #f7edda; box-shadow: inset 4px 0 var(--gold); }
+    .product-row.selected .product-name, .product-row.selected .price { color: #76551c; }
+    .product-name { padding: 8px 0; border: 0; background: transparent; color: var(--ink); font-family: Georgia, serif; font-size: 19px; text-align: left; }
+    .price { color: #302b22; font-size: 20px; font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+    .actions { display: flex; justify-content: flex-end; gap: 7px; }
+    .icon-button { min-width: 36px; min-height: 36px; border: 1px solid var(--line); border-radius: 6px; background: white; color: #554f43; }
+    .icon-button:hover { border-color: var(--gold); color: #886528; }
+    .admin-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+    .secondary-button { min-height: 44px; padding: 0 14px; border: 1px solid var(--gold); border-radius: 7px; background: transparent; color: #76551c; font-weight: 600; }
+    .secondary-button:hover { background: #f7edda; }
+    .pair-form { width: min(390px, 100%); margin: 20px auto 0; text-align: left; }
+    .pair-form .field { margin: 12px 0; }
+    .pair-form .save-button { width: 100%; }
+    .admin-panel { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 12px; margin: 18px 0 0; }
+    .pairing-code { width: 100%; padding: 16px; border: 1px dashed var(--gold); border-radius: 9px; background: #fcf8ee; text-align: center; }
+    .pairing-code strong { display: block; margin: 5px 0; color: #76551c; font-size: 28px; letter-spacing: .16em; }
+    .pairing-code span { color: var(--muted); font-size: 13px; }
+    .device-list { display: grid; width: min(490px, 100%); gap: 8px; margin-top: 12px; text-align: left; }
+    .device-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px; background: white; font-size: 13px; }
+    .device-item .icon-button { flex: 0 0 auto; }
+    .connection-status { min-height: 18px; margin: 10px 0 0; color: #a1362b; font-size: 13px; }
+    [hidden] { display: none !important; }
+
+    .empty { padding: 56px 20px; text-align: center; }
+    .empty-icon { margin-bottom: 13px; color: var(--gold); font-family: Georgia, serif; font-size: 34px; }
+    .empty h2 { margin: 0; font-family: Georgia, serif; font-size: 23px; font-weight: 500; }
+    .empty p { margin: 9px 0 0; color: var(--muted); font-size: 14px; }
+    .admin-note { margin: 17px 0 0; color: #8e887c; font-size: 12px; text-align: center; }
+    .footer { margin-top: 22px; color: #8e887c; font-size: 12px; text-align: center; }
+
+    dialog { width: min(440px, calc(100% - 30px)); padding: 0; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 20px 70px #17161240; }
+    dialog::backdrop { background: #17161280; }
+    .dialog-content { padding: 25px; }
+    .dialog-content h2 { margin: 0 0 20px; font-family: Georgia, serif; font-size: 25px; font-weight: 500; }
+    .field { display: block; margin: 15px 0; color: #5e584d; font-size: 13px; font-weight: 600; }
+    .field input { display: block; width: 100%; min-height: 44px; margin-top: 7px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px; background: #fff; }
+    .price-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; }
+    .cancel-button { min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 7px; background: white; color: var(--ink); }
+    .error { min-height: 18px; margin: 10px 0 0; color: #a1362b; font-size: 13px; }
+
+    @media (max-width: 700px) {
+      .topbar { min-height: 68px; padding-inline: 16px; }
+      .brand-caption { font-size: 9px; }
+      .brand-logo { width: 58px; height: 48px; }
+      main { width: calc(100% - 28px); margin-top: 30px; }
+      .intro { align-items: stretch; flex-direction: column; gap: 18px; }
+      .tools { width: 100%; }
+      .search-wrap { flex: 1; }
+      .search { width: 100%; }
+      .table-head, .product-row { grid-template-columns: minmax(100px, 1fr) minmax(92px, .7fr) minmax(92px, .7fr) auto; column-gap: 8px; padding-inline: 12px; }
+      .table-head { min-height: 46px; font-size: 9px; letter-spacing: .07em; }
+      .product-row { min-height: 74px; }
+      .product-name { font-size: 16px; }
+      .price { font-size: 15px; }
+      .actions { gap: 4px; }
+      .icon-button { min-width: 32px; min-height: 32px; }
+    }
+
+    @media (max-width: 430px) {
+      .brand-name { font-size: 18px; }
+      .admin-button { padding: 9px; font-size: 12px; }
+      .table-head, .product-row { grid-template-columns: minmax(90px, 1fr) minmax(74px, .7fr) minmax(74px, .7fr) auto; column-gap: 5px; padding-inline: 9px; }
+      .table-head { font-size: 8px; }
+      .product-name { font-size: 14px; }
+      .price { font-size: 13px; }
+      .icon-button { min-width: 28px; min-height: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="colorado.png" alt="Logo de Super Carnes El Colorado">
+      <div>
+        <p class="brand-name" id="business-name">Super Carnes El Colorado</p>
+        <p class="brand-caption">Precios claros, servicio de calidad</p>
+      </div>
+    </div>
+    <button class="admin-button" id="admin-toggle" type="button">Administrar</button>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Nuestro catálogo</p>
+        <h1>Precios del negocio</h1>
+        <p class="updated" id="updated-at">Consulta nuestros precios vigentes</p>
+      </div>
+      <div class="tools">
+        <label class="search-wrap">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input class="search" id="search" type="search" placeholder="Buscar producto" aria-label="Buscar producto">
+        </label>
+        <div class="admin-tools" id="admin-tools" hidden>
+          <button class="add-button" id="add-product" type="button">+ Agregar</button>
+          <button class="secondary-button" id="generate-pairing" type="button">Vincular tableta</button>
+          <button class="secondary-button" id="toggle-devices" type="button">Tabletas autorizadas</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="price-card" aria-label="Lista de precios">
+      <div class="table-head">
+        <span>Producto</span>
+        <span>Precio a la mesa</span>
+        <span>Precio por caja</span>
+        <span id="actions-heading" hidden>Acciones</span>
+      </div>
+      <div id="product-list"></div>
+      <div class="empty" id="empty-state" hidden>
+        <div class="empty-icon" aria-hidden="true">✦</div>
+        <h2 id="empty-title">Precios próximamente</h2>
+        <p id="empty-message">Estamos preparando nuestra lista. Consulta pronto.</p>
+        <form class="pair-form" id="pair-form" hidden>
+          <label class="field">Código de autorización del administrador
+            <input id="pair-code" type="text" maxlength="12" minlength="12" required autocomplete="one-time-code" placeholder="Código de 12 caracteres">
+          </label>
+          <label class="field">Nombre para identificar esta tableta
+            <input id="device-name" type="text" maxlength="80" autocomplete="off" placeholder="Ej. Tableta del mostrador">
+          </label>
+          <button class="save-button" type="submit">Autorizar esta tableta</button>
+        </form>
+      </div>
+    </section>
+    <section class="admin-panel" id="admin-panel" hidden>
+      <div class="pairing-code" id="pairing-code-result" hidden>
+        Código de un solo uso · vence en 15 minutos
+        <strong id="pairing-code-text"></strong>
+        <span>Escribe este código en la tableta que quieras autorizar.</span>
+      </div>
+      <div class="device-list" id="device-list" hidden></div>
+    </section>
+    <p class="admin-note" id="admin-note" hidden>Modo administrador · Los cambios se sincronizan en tiempo real.</p>
+    <p class="connection-status" id="connection-status" role="status" aria-live="polite"></p>
+    <p class="footer">Gracias por visitarnos</p>
+  </main>
+
+  <dialog id="admin-dialog">
+    <form class="dialog-content" id="admin-form">
+      <h2 id="admin-title">Administrar precios</h2>
+      <label class="field">Contraseña de administrador
+        <input id="admin-password" type="password" minlength="12" required autocomplete="current-password" placeholder="Ingresa tu contraseña">
+      </label>
+      <p class="error" id="admin-error" role="alert"></p>
+      <div class="dialog-actions">
+        <button class="cancel-button" id="cancel-admin" type="button">Cancelar</button>
+        <button class="save-button" id="admin-submit" type="submit">Entrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="product-dialog">
+    <form class="dialog-content" id="product-form">
+      <h2 id="form-title">Agregar producto</h2>
+      <label class="field">Nombre del producto
+        <input id="product-name" name="name" maxlength="80" required autocomplete="off" placeholder="Ej. Producto">
+      </label>
+      <div class="price-fields">
+        <label class="field">Precio a la mesa
+          <input id="table-price" name="tablePrice" type="number" min="0" step="0.01" required inputmode="decimal" placeholder="0.00">
+        </label>
+        <label class="field">Precio por caja
+          <input id="box-price" name="boxPrice" type="number" min="0" step="0.01" required inputmode="decimal" placeholder="0.00">
+        </label>
+      </div>
+      <p class="error" id="form-error" role="alert"></p>
+      <div class="dialog-actions">
+        <button class="cancel-button" id="cancel-form" type="button">Cancelar</button>
+        <button class="save-button" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
