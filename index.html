@@ -102,6 +102,20 @@
     .actions { display: flex; justify-content: flex-end; gap: 7px; }
     .icon-button { min-width: 36px; min-height: 36px; border: 1px solid var(--line); border-radius: 6px; background: white; color: #554f43; }
     .icon-button:hover { border-color: var(--gold); color: #886528; }
+    .admin-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+    .secondary-button { min-height: 44px; padding: 0 14px; border: 1px solid var(--gold); border-radius: 7px; background: transparent; color: #76551c; font-weight: 600; }
+    .secondary-button:hover { background: #f7edda; }
+    .pair-form { width: min(390px, 100%); margin: 20px auto 0; text-align: left; }
+    .pair-form .field { margin: 12px 0; }
+    .pair-form .save-button { width: 100%; }
+    .admin-panel { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 12px; margin: 18px 0 0; }
+    .pairing-code { width: 100%; padding: 16px; border: 1px dashed var(--gold); border-radius: 9px; background: #fcf8ee; text-align: center; }
+    .pairing-code strong { display: block; margin: 5px 0; color: #76551c; font-size: 28px; letter-spacing: .16em; }
+    .pairing-code span { color: var(--muted); font-size: 13px; }
+    .device-list { display: grid; width: min(490px, 100%); gap: 8px; margin-top: 12px; text-align: left; }
+    .device-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px; background: white; font-size: 13px; }
+    .device-item .icon-button { flex: 0 0 auto; }
+    .connection-status { min-height: 18px; margin: 10px 0 0; color: #a1362b; font-size: 13px; }
     [hidden] { display: none !important; }
 
     .empty { padding: 56px 20px; text-align: center; }
@@ -175,7 +189,11 @@
           <span class="search-icon" aria-hidden="true">⌕</span>
           <input class="search" id="search" type="search" placeholder="Buscar producto" aria-label="Buscar producto">
         </label>
-        <button class="add-button" id="add-product" type="button" hidden>+ Agregar</button>
+        <div class="admin-tools" id="admin-tools" hidden>
+          <button class="add-button" id="add-product" type="button">+ Agregar</button>
+          <button class="secondary-button" id="generate-pairing" type="button">Vincular tableta</button>
+          <button class="secondary-button" id="toggle-devices" type="button">Tabletas autorizadas</button>
+        </div>
       </div>
     </section>
 
@@ -191,9 +209,27 @@
         <div class="empty-icon" aria-hidden="true">✦</div>
         <h2 id="empty-title">Precios próximamente</h2>
         <p id="empty-message">Estamos preparando nuestra lista. Consulta pronto.</p>
+        <form class="pair-form" id="pair-form" hidden>
+          <label class="field">Código de autorización del administrador
+            <input id="pair-code" type="text" maxlength="12" minlength="12" required autocomplete="one-time-code" placeholder="Código de 12 caracteres">
+          </label>
+          <label class="field">Nombre para identificar esta tableta
+            <input id="device-name" type="text" maxlength="80" autocomplete="off" placeholder="Ej. Tableta del mostrador">
+          </label>
+          <button class="save-button" type="submit">Autorizar esta tableta</button>
+        </form>
       </div>
     </section>
-    <p class="admin-note" id="admin-note" hidden>Modo administrador · Los cambios se guardan en esta tableta.</p>
+    <section class="admin-panel" id="admin-panel" hidden>
+      <div class="pairing-code" id="pairing-code-result" hidden>
+        Código de un solo uso · vence en 15 minutos
+        <strong id="pairing-code-text"></strong>
+        <span>Escribe este código en la tableta que quieras autorizar.</span>
+      </div>
+      <div class="device-list" id="device-list" hidden></div>
+    </section>
+    <p class="admin-note" id="admin-note" hidden>Modo administrador · Los cambios se sincronizan en tiempo real.</p>
+    <p class="connection-status" id="connection-status" role="status" aria-live="polite"></p>
     <p class="footer">Gracias por visitarnos</p>
   </main>
 
@@ -201,10 +237,7 @@
     <form class="dialog-content" id="admin-form">
       <h2 id="admin-title">Administrar precios</h2>
       <label class="field">Contraseña de administrador
-        <input id="admin-pin" type="password" minlength="4" required autocomplete="current-password" placeholder="Ingresa tu contraseña">
-      </label>
-      <label class="field" id="pin-confirm-field" hidden>Confirma tu contraseña
-        <input id="admin-pin-confirm" type="password" minlength="4" autocomplete="new-password" placeholder="Repite tu contraseña">
+        <input id="admin-password" type="password" minlength="12" required autocomplete="current-password" placeholder="Ingresa tu contraseña">
       </label>
       <p class="error" id="admin-error" role="alert"></p>
       <div class="dialog-actions">
@@ -236,228 +269,6 @@
     </form>
   </dialog>
 
-  <script>
-    (() => {
-      const PRODUCTS_KEY = "lista-precios-products-v1";
-      const PIN_KEY = "lista-precios-admin-pin-v1";
-      const UPDATED_KEY = "lista-precios-updated-v1";
-      const currency = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" });
-      const list = document.getElementById("product-list");
-      const emptyState = document.getElementById("empty-state");
-      const emptyTitle = document.getElementById("empty-title");
-      const emptyMessage = document.getElementById("empty-message");
-      const search = document.getElementById("search");
-      const dialog = document.getElementById("product-dialog");
-      const adminDialog = document.getElementById("admin-dialog");
-      const form = document.getElementById("product-form");
-      const error = document.getElementById("form-error");
-      const adminForm = document.getElementById("admin-form");
-      let isFirstAdminSetup = false;
-      let products = loadProducts();
-      let isAdmin = false;
-      let editingId = null;
-      let selectedId = null;
-
-      function loadProducts() {
-        try {
-          const value = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || "[]");
-          return Array.isArray(value) ? value.filter(item =>
-            item && typeof item.id === "string" && typeof item.name === "string" &&
-            Number.isFinite(item.tablePrice) && Number.isFinite(item.boxPrice)
-          ) : [];
-        } catch (error) {
-          console.error("No se pudieron leer los productos guardados.", error);
-          return [];
-        }
-      }
-
-      function saveProducts() {
-        try {
-          localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-          localStorage.setItem(UPDATED_KEY, new Date().toISOString());
-        } catch (error) {
-          console.error("No se pudieron guardar los productos.", error);
-          window.alert("No fue posible guardar los cambios en esta tableta. Revisa el espacio disponible del navegador.");
-          return false;
-        }
-        render();
-        return true;
-      }
-
-      function render() {
-        const query = search.value.trim().toLocaleLowerCase("es-MX");
-        const visible = products.filter(product => product.name.toLocaleLowerCase("es-MX").includes(query));
-        list.replaceChildren();
-
-        visible.forEach(product => {
-          const row = document.createElement("div");
-          row.className = "product-row";
-          row.classList.toggle("selected", product.id === selectedId);
-          row.addEventListener("click", () => {
-            selectedId = selectedId === product.id ? null : product.id;
-            render();
-          });
-          const name = document.createElement("button");
-          name.className = "product-name";
-          name.type = "button";
-          name.setAttribute("aria-pressed", product.id === selectedId);
-          name.setAttribute("aria-label", `Seleccionar ${product.name}`);
-          name.textContent = product.name;
-          const tablePrice = document.createElement("span");
-          tablePrice.className = "price";
-          tablePrice.textContent = currency.format(product.tablePrice);
-          const boxPrice = document.createElement("span");
-          boxPrice.className = "price";
-          boxPrice.textContent = currency.format(product.boxPrice);
-          row.append(name, tablePrice, boxPrice);
-
-          if (isAdmin) {
-            const actions = document.createElement("div");
-            actions.className = "actions";
-            const edit = document.createElement("button");
-            edit.className = "icon-button";
-            edit.type = "button";
-            edit.setAttribute("aria-label", `Editar ${product.name}`);
-            edit.textContent = "✎";
-            edit.addEventListener("click", event => {
-              event.stopPropagation();
-              openForm(product);
-            });
-            const remove = document.createElement("button");
-            remove.className = "icon-button";
-            remove.type = "button";
-            remove.setAttribute("aria-label", `Eliminar ${product.name}`);
-            remove.textContent = "×";
-            remove.addEventListener("click", event => {
-              event.stopPropagation();
-              if (window.confirm(`¿Eliminar "${product.name}" de la lista?`)) {
-                products = products.filter(item => item.id !== product.id);
-                if (selectedId === product.id) selectedId = null;
-                saveProducts();
-              }
-            });
-            actions.append(edit, remove);
-            row.append(actions);
-          }
-          list.append(row);
-        });
-
-        emptyState.hidden = visible.length > 0;
-        if (products.length === 0) {
-          emptyTitle.textContent = isAdmin ? "Agrega el primer producto" : "Precios próximamente";
-          emptyMessage.textContent = isAdmin
-            ? "Usa “Agregar” para publicar el primer precio."
-            : "Estamos preparando nuestra lista. Consulta pronto.";
-        } else {
-          emptyTitle.textContent = "No encontramos ese producto";
-          emptyMessage.textContent = "Prueba con otro nombre.";
-        }
-
-        document.getElementById("add-product").hidden = !isAdmin;
-        document.getElementById("actions-heading").hidden = !isAdmin;
-        document.getElementById("admin-note").hidden = !isAdmin;
-        document.getElementById("admin-toggle").classList.toggle("active", isAdmin);
-        document.getElementById("admin-toggle").textContent = isAdmin ? "Salir de administrar" : "Administrar";
-
-        const updated = localStorage.getItem(UPDATED_KEY);
-        document.getElementById("updated-at").textContent = updated
-          ? `Precios actualizados: ${new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date(updated))}`
-          : "Consulta nuestros precios vigentes";
-      }
-
-      function enterAdmin() {
-        isFirstAdminSetup = !localStorage.getItem(PIN_KEY);
-        adminForm.reset();
-        document.getElementById("admin-error").textContent = "";
-        document.getElementById("admin-title").textContent = isFirstAdminSetup ? "Crear contraseña" : "Administrar precios";
-        document.getElementById("pin-confirm-field").hidden = !isFirstAdminSetup;
-        document.getElementById("admin-pin-confirm").required = isFirstAdminSetup;
-        document.getElementById("admin-submit").textContent = isFirstAdminSetup ? "Crear contraseña" : "Entrar";
-        adminDialog.showModal();
-        document.getElementById("admin-pin").focus();
-      }
-
-      function openForm(product) {
-        editingId = product ? product.id : null;
-        form.reset();
-        error.textContent = "";
-        document.getElementById("form-title").textContent = product ? "Editar producto" : "Agregar producto";
-        if (product) {
-          document.getElementById("product-name").value = product.name;
-          document.getElementById("table-price").value = product.tablePrice;
-          document.getElementById("box-price").value = product.boxPrice;
-        }
-        dialog.showModal();
-        document.getElementById("product-name").focus();
-      }
-
-      document.getElementById("admin-toggle").addEventListener("click", () => {
-        if (isAdmin) {
-          isAdmin = false;
-          render();
-        } else {
-          enterAdmin();
-        }
-      });
-      document.getElementById("cancel-admin").addEventListener("click", () => adminDialog.close());
-      adminForm.addEventListener("submit", event => {
-        event.preventDefault();
-        const enteredPin = document.getElementById("admin-pin").value;
-        const adminError = document.getElementById("admin-error");
-        if (isFirstAdminSetup) {
-          if (enteredPin !== document.getElementById("admin-pin-confirm").value) {
-            adminError.textContent = "Las contraseñas no coinciden.";
-            return;
-          }
-          try {
-            localStorage.setItem(PIN_KEY, enteredPin);
-          } catch (storageError) {
-            console.error("No se pudo guardar el PIN de administrador.", storageError);
-            adminError.textContent = "No fue posible guardar el PIN en esta tableta.";
-            return;
-          }
-        } else if (enteredPin !== localStorage.getItem(PIN_KEY)) {
-          adminError.textContent = "PIN incorrecto.";
-          document.getElementById("admin-pin").select();
-          return;
-        }
-        adminDialog.close();
-        isAdmin = true;
-        render();
-      });
-      document.getElementById("add-product").addEventListener("click", () => openForm(null));
-      document.getElementById("cancel-form").addEventListener("click", () => dialog.close());
-      search.addEventListener("input", render);
-
-      form.addEventListener("submit", event => {
-        event.preventDefault();
-        const name = document.getElementById("product-name").value.trim();
-        const tablePrice = Number(document.getElementById("table-price").value);
-        const boxPrice = Number(document.getElementById("box-price").value);
-        if (!name || !Number.isFinite(tablePrice) || tablePrice < 0 || !Number.isFinite(boxPrice) || boxPrice < 0) {
-          error.textContent = "Escribe un nombre y precios válidos.";
-          return;
-        }
-
-        if (editingId) {
-          products = products.map(product => product.id === editingId
-            ? { ...product, name, tablePrice, boxPrice }
-            : product);
-        } else {
-          products.push({ id: crypto.randomUUID(), name, tablePrice, boxPrice });
-        }
-        if (saveProducts()) dialog.close();
-      });
-
-      window.addEventListener("storage", event => {
-        if ([PRODUCTS_KEY, UPDATED_KEY].includes(event.key)) {
-          products = loadProducts();
-          render();
-        }
-      });
-
-      render();
-    })();
-  </script>
+  <script src="app.js" defer></script>
 </body>
 </html>
